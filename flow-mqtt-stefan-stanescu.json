@@ -1,0 +1,165 @@
+[
+    {
+        "id": "e6d2e284d75a02f4",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "27f69f6fcc02651b",
+        "type": "mqtt-broker",
+        "name": "ServerMqtt",
+        "broker": "mqtt.beia-telemetrie.ro",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "fa11569ec059bea1",
+        "type": "influxdb",
+        "hostname": "127.0.0.1",
+        "port": 8086,
+        "protocol": "http",
+        "database": "database",
+        "name": "",
+        "usetls": false,
+        "tls": "",
+        "influxdbVersion": "1.x",
+        "url": "http://localhost:8086",
+        "timeout": 10,
+        "rejectUnauthorized": true
+    },
+    {
+        "id": "cb6f76e1ff42af11",
+        "type": "mqtt in",
+        "z": "e6d2e284d75a02f4",
+        "name": "",
+        "topic": "training/device/stefan-stanescu",
+        "qos": "0",
+        "datatype": "auto-detect",
+        "broker": "27f69f6fcc02651b",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 170,
+        "y": 200,
+        "wires": [
+            [
+                "94aadc0f68de284d",
+                "857ca0a2a2979d15"
+            ]
+        ]
+    },
+    {
+        "id": "516c4f24f9511852",
+        "type": "function",
+        "z": "e6d2e284d75a02f4",
+        "name": "function 1",
+        "func": "msg.payload = [\n  {\n    measurement: \"sensor_data\",\n    fields: {\n      temperature: msg.payload.temperature,\n      humidity: msg.payload.humidity\n    },\n    tags: {\n      device: \"stefan-stanescu\"\n    }\n  }\n];\nreturn msg;\n",
+        "outputs": 1,
+        "timeout": 0,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 580,
+        "y": 200,
+        "wires": [
+            [
+                "28628be1b53887db"
+            ]
+        ]
+    },
+    {
+        "id": "28628be1b53887db",
+        "type": "influxdb out",
+        "z": "e6d2e284d75a02f4",
+        "name": "",
+        "measurement": "",
+        "precision": "",
+        "retentionPolicy": "",
+        "database": "database",
+        "precisionV18FluxV20": "ms",
+        "retentionPolicyV18Flux": "",
+        "org": "organisation",
+        "bucket": "bucket",
+        "x": 740,
+        "y": 200,
+        "wires": []
+    },
+    {
+        "id": "7bc96abe3a59964f",
+        "type": "debug",
+        "z": "e6d2e284d75a02f4",
+        "name": "debug 1",
+        "active": true,
+        "tosidebar": true,
+        "console": false,
+        "tostatus": false,
+        "complete": "false",
+        "statusVal": "",
+        "statusType": "auto",
+        "x": 580,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "94aadc0f68de284d",
+        "type": "json",
+        "z": "e6d2e284d75a02f4",
+        "name": "",
+        "property": "payload",
+        "action": "",
+        "pretty": false,
+        "x": 390,
+        "y": 200,
+        "wires": [
+            [
+                "516c4f24f9511852",
+                "7bc96abe3a59964f"
+            ]
+        ]
+    },
+    {
+        "id": "857ca0a2a2979d15",
+        "type": "file",
+        "z": "e6d2e284d75a02f4",
+        "name": "",
+        "filename": "data.json",
+        "filenameType": "str",
+        "appendNewline": true,
+        "createDir": false,
+        "overwriteFile": "false",
+        "encoding": "none",
+        "x": 460,
+        "y": 360,
+        "wires": [
+            []
+        ]
+    }
+]
